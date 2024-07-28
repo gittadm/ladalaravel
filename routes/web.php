@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Task2Controller;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,6 @@ Route::get('task2', [TaskController::class, 'task2']);
 Route::get('task3', [TaskController::class, 'task3']);
 Route::get('task4', [TaskController::class, 'task4']);
 Route::get('task5', [TaskController::class, 'task5']);
+
+Route::get('lesson2/task1', [Task2Controller::class, 'task1']);
+Route::get('lesson2/task3', [Task2Controller::class, 'task3']);
