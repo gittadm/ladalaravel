@@ -86,12 +86,6 @@ class Task2Controller extends Controller
             Удали из строки идущие подряд буквы
             Пример: abcabcdaaafeecbaccc => abcabcdafecbac
         */
-
-        /*
-         * Выводить данные на экран в виде таблицы из бд,
-         * сделать кнопку, чтобы удаляла по одной строке
-         * этих данных
-         */
     }
 
     public function task3()
@@ -108,5 +102,51 @@ class Task2Controller extends Controller
         $book->save();
 
         echo $book->id;
+    }
+
+    public function books()
+    {
+        /*
+         * Выводить данные на экран в виде таблицы из бд,
+         * сделать кнопку, чтобы удаляла по одной строке
+         * этих данных
+         */
+
+        // все книги
+        $books = Book::all();
+
+        // получить все книги, у которых год равен 2020
+        $books = Book::where('year', 2020)->get();
+
+        // получить книгу, у которой id = 1
+        $book = Book::find(1);
+
+        // получить все книги, у которых год больше или равен 2000
+        // <, >, <=, >=, <>, !=
+        $books = Book::where('year', '>=', 2020)->get();
+
+        // получить все книги, у которых год от 2000 до 2023 и
+        // у которых есть description (не null)
+        // у которых автор Джек Лондон
+        // и результат отсортировать по title
+
+        $books = Book::where('author', 'Джек Лондон')
+            ->whereNotNull('description')  // ->whereNull('description')
+//            ->where('year', '<=', 2023)
+//            ->where('year', '>=', 2000)
+            ->whereBetween('year', [2000, 2023])
+            ->orderBy('title', 'desc') // по убыванию
+            ->get();
+
+        $books = Book::orderBy('id')->get();
+
+        return view('books', ['books' => $books]);
+    }
+
+    public function deleteBook(int $id)
+    {
+        Book::where('id', $id)->delete();
+
+        return redirect()->route('books');
     }
 }
