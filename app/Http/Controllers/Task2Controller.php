@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Task2Controller extends Controller
 {
@@ -46,7 +48,8 @@ class Task2Controller extends Controller
         //  a < b :  четное число меньше нечетного
         //  a = b :  одной четности
 
-        function my_sort($a, $b) {
+        function my_sort($a, $b)
+        {
             if ($a % 2 == 0 && $b % 2 == 1) {
                 return -1;
             }
@@ -65,15 +68,22 @@ class Task2Controller extends Controller
          * То есть $a=[[0,-1], [1,2,3],[4,5],[1,2,3,4,5],[100,100]];
          * Можно использовать usort.
          */
-        $a=[[0,-1], [1,2,3],[4,5],[1,2,3,4,5],[100,100]];
-        function my_sort($a, $b) {
+        $a = [[0, -1], [1, 2, 3], [4, 5], [1, 2, 3, 4, 5], [100, 100]];
+        function my_sort($a, $b)
+        {
             $sumA = array_sum($a);
             $sumB = array_sum($b);
 
-            if ($sumA < $sumB) return -1;
-            if ($sumB < $sumA) return 1;
+            if ($sumA < $sumB) {
+                return -1;
+            }
+            if ($sumB < $sumA) {
+                return 1;
+            }
 
-            if ($sumA == $sumB) return 0;
+            if ($sumA == $sumB) {
+                return 0;
+            }
         }
 
         usort($a, 'my_sort');
@@ -148,5 +158,32 @@ class Task2Controller extends Controller
         Book::where('id', $id)->delete();
 
         return redirect()->route('books');
+    }
+
+    public function filterBooks(Request $request)
+    {
+        // dd($request->all());
+
+        $title = $request->title;
+        $year = $request->year;
+
+        $books = Book::query();
+
+        if (!empty($year)) {
+            $books->where('year', $year);
+        }
+
+        if (!empty($title)) {
+            $title = Str::lower(trim($title));
+            $books->where('title', 'like', '%' . $title . '%');
+        }
+
+        $books->orderBy('id');
+
+        $books = $books->get();
+
+        return view('books', compact('books', 'title', 'year'));
+//        return view('books',
+//                    ['books' => $books, 'title' => $title, 'year' => $year]);
     }
 }
