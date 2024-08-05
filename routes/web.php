@@ -29,3 +29,5 @@ Route::get('lesson2/task1', [Task2Controller::class, 'task1']);
 Route::get('lesson2/task3', [Task2Controller::class, 'task3']);
 Route::get('lesson2/books', [Task2Controller::class, 'filterBooks'])->name('books');
 Route::get('lesson2/books/delete/{id}', [Task2Controller::class, 'deleteBook'])->name('books.delete');
+
+Route::get('lesson3/task-about-surnames', [Task2Controller::class, 'task']);

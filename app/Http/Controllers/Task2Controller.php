@@ -186,4 +186,46 @@ class Task2Controller extends Controller
 //        return view('books',
 //                    ['books' => $books, 'title' => $title, 'year' => $year]);
     }
+
+    public function task()
+    {
+        /*Дан массив, элементами которого являются массивы,
+         содержащие фамилии учеников. Например,
+        a = [['ivanov', 'petrov'], ['ivanov', 'sidorov'], ['ivanov', 'petrov', 'leonov']].
+        1. Найти учеников, которые есть в каждом подмассиве.
+        2. Найти учеников, которые есть только в одном подмассиве.
+        3. Найти учеников, которые есть только ровно в 2 подмассивах.
+        4. Найти учеников, которые есть только в k (k - число дано) подмассивах.
+        */
+
+        $a = [
+            ['ivanov', 'petrov'],
+            ['ivanov', 'petrov', 'sidorov'],
+            ['ivanov', 'petrov', 'leonov'],
+        ];
+
+        $uniqueSurnames = []; // ['ivanov', 'petrov', 'sidorov', 'leonov'];
+        foreach ($a as $surnames) {
+            $uniqueSurnames = array_merge($uniqueSurnames, $surnames);
+        }
+
+        $uniqueSurnames = array_values(array_unique($uniqueSurnames));
+
+        $result1 = [];
+        foreach ($uniqueSurnames as $uniqueSurname) {
+            $isInAll = true;
+            foreach ($a as $surnames) {
+                if (!in_array($uniqueSurname, $surnames)) {
+                    $isInAll = false;
+                    break;
+                }
+            }
+
+            if ($isInAll) {
+                $result1[] = $uniqueSurname;
+            }
+        }
+
+        dd($result1);
+    }
 }
